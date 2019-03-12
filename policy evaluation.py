@@ -52,7 +52,6 @@ STATE_TRANSITION[0, :, :] = 0
 
 # Reward function
 REWARD = np.zeros(N_STATES) - 1
-# REWARD[0] = 0
 
 gamma = 1
 
@@ -79,13 +78,14 @@ while True:
 
     for state in states:
         v = old_V[state]
-        # d = [policy[state][action] * 3 for action in actions]
         V[state] = sum([policy[state][action] * sum([STATE_TRANSITION[state, action, next_state] * (REWARD[next_state] + gamma * old_V[next_state]) for next_state
             in states]) for action in actions])
 
         max_delta = max(max_delta, abs(V[state] - v))
 
     iteration += 1
+
+    # reshape the value into 4 by 4 matrix for visualization
     print("iteration {}".format(iteration))
     temp = V.copy()
     temp = np.append(temp, temp[0])
